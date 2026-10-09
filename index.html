@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ESOFT Metro Campus - Master MCQ Portal (Session 03 Ultra-Hard)</title>
+  <style>
+    :root {
+      --esoft-blue: #021a2e;
+      --esoft-navy: #0b2545;
+      --accent-gold: #ffc107;
+      --accent-red: #f43f5e;
+      --accent-green: #10b981;
+      --bg-gradient: linear-gradient(135deg, #090d16 0%, #111827 100%);
+      --card-bg: rgba(255, 255, 255, 0.98);
+      --text-dark: #0f172a;
+      --text-muted: #64748b;
+      --radius: 12px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+    }
+
+    body {
+      background: var(--bg-gradient);
+      color: var(--text-dark);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .portal-card {
+      background: var(--card-bg);
+      width: 100%;
+      max-width: 880px;
+      border-radius: var(--radius);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      overflow: hidden;
+      animation: fadeIn 0.5s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    header {
+      background: var(--esoft-blue);
+      color: #ffffff;
+      padding: 24px 32px;
+      border-bottom: 4px solid var(--accent-gold);
+    }
+
+    header .badge {
+      display: inline-block;
+      background: var(--accent-gold);
+      color: var(--esoft-blue);
+      font-weight: 800;
+      font-size: 0.75rem;
+      padding: 4px 10px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 8px;
+    }
+
+    header h1 {
+      font-size: 1.8rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    header p {
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.8);
+      margin-top: 4px;
+    }
+
+    .content {
+      padding: 32px;
+    }
+
+    .screen {
+      display: none;
+    }
+
+    .screen.active {
+      display: block;
+    }
+
+    .form-group {
+      margin-bottom: 24px;
+    }
+
+    label {
+      display: block;
+      font-weight: 700;
+      color: var(--esoft-navy);
+      margin-bottom: 8px;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 14px 18px;
+      border: 2px solid #cbd5e1;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: all 0.2s;
+    }
+
+    input[type="text"]:focus {
+      outline: none;
+      border-color: var(--esoft-navy);
+      box-shadow: 0 0 0 3px rgba(11, 37, 69, 0.15);
+    }
+
+    .btn {
+      background: var(--esoft-navy);
+      color: #ffffff;
+      border: none;
+      padding: 12px 24px;
+      font-size: 1rem;
+      font-weight: 700;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn:hover {
+      background: #021a2e;
+      transform: translateY(-1px);
+    }
+
+    .btn:disabled {
+      background: #94a3b8;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .mode-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 16px;
+      margin-top: 20px;
+    }
+
+    .mode-card {
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 20px 16px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.25s;
+      background: #f8fafc;
+    }
+
+    .mode-card:hover {
+      border-color: var(--esoft-navy);
+      background: #ffffff;
+      transform: translateY(-3px);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    }
+
+    .mode-card h3 {
+      color: var(--esoft-navy);
+      margin-bottom: 6px;
+    }
+
+    .mode-card p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .quiz-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 8px;
+      background: #e2e8f0;
+      border-radius: 4px;
+      margin-bottom: 24px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: var(--esoft-navy);
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    .timer-tag {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--accent-red);
+      background: #fff1f2;
+      border: 1px solid #fecdd3;
+      padding: 6px 14px;
+      border-radius: 20px;
+    }
+
+    .question-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--esoft-navy);
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+
+    .options-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+
+    .option-label {
+      display: flex;
+      align-items: center;
+      padding: 14px 18px;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: #ffffff;
+      font-size: 0.95rem;
+    }
+
+    .option-label:hover {
+      border-color: var(--esoft-navy);
+      background: #f1f5f9;
+    }
+
+    .option-label input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      margin-right: 14px;
+      cursor: pointer;
+      accent-color: var(--esoft-navy);
+    }
+
+    .nav-buttons {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .results-box {
+      text-align: center;
+    }
+
+    .results-box h2 {
+      font-size: 1.8rem;
+      color: var(--esoft-navy);
+      margin-bottom: 20px;
+    }
+
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 16px;
+      margin: 24px 0;
+    }
+
+    .metric-card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      padding: 16px;
+      border-radius: 8px;
+    }
+
+    .metric-card .val {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--esoft-navy);
+    }
+
+    .metric-card .lbl {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      font-weight: 700;
+      margin-top: 4px;
+    }
+
+    .grade-badge {
+      display: inline-block;
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: #ffffff;
+      background: var(--esoft-navy);
+      padding: 12px 28px;
+      border-radius: 30px;
+      margin-top: 10px;
+    }
+
+    .failed-status {
+      color: var(--accent-red);
+      font-size: 2.2rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="portal-card">
+  <header>
+    <span class="badge">Session 03 • Ultra-Hard Examination</span>
+    <h1>ESOFT Metro Campus</h1>
+    <p>Unit 1: Information Technology Concepts - Rigorous Analytical MCQ Assessment</p>
+  </header>
+
+  <div class="content">
+    <!-- Screen 1: Name Entry -->
+    <div id="screen-name" class="screen active">
+      <div class="form-group">
+        <label for="student-name">Enter Registered Student Name:</label>
+        <input type="text" id="student-name" placeholder="Full Candidate Name..." autocomplete="off">
+      </div>
+      <button class="btn" onclick="submitName()">Proceed to Difficulty Selection →</button>
+    </div>
+
+    <!-- Screen 2: Mode Selection -->
+    <div id="screen-mode" class="screen">
+      <h2 style="color: var(--esoft-navy); margin-bottom: 8px;">Select Assessment Mode</h2>
+      <p style="color: var(--text-muted); font-size: 0.95rem;">All 120 questions are newly generated from the attached slide materials with heightened challenge levels.</p>
+      
+      <div class="mode-grid">
+        <div class="mode-card" onclick="startQuiz('easy')">
+          <h3>Easy</h3>
+          <p>Time: 15 Mins</p>
+          <span style="font-size: 0.75rem; color: var(--accent-red); font-weight: 700;">Elevated Baseline</span>
+        </div>
+        <div class="mode-card" onclick="startQuiz('medium')">
+          <h3>Medium</h3>
+          <p>Time: 30 Mins</p>
+          <span style="font-size: 0.75rem; color: var(--accent-red); font-weight: 700;">Intermediate Rigour</span>
+        </div>
+        <div class="mode-card" onclick="startQuiz('hard')">
+          <h3>Hard</h3>
+          <p>Time: 45 Mins</p>
+          <span style="font-size: 0.75rem; color: var(--accent-red); font-weight: 700;">Advanced Architectural</span>
+        </div>
+        <div class="mode-card" onclick="startQuiz('super_hard')">
+          <h3>Super Hard</h3>
+          <p>Time: 1 Hour</p>
+          <span style="font-size: 0.75rem; color: var(--accent-red); font-weight: 700;">Expert Analytical</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Screen 3: Quiz Screen -->
+    <div id="screen-quiz" class="screen">
+      <div class="quiz-bar">
+        <span id="question-tracker" style="font-weight: 700; color: var(--esoft-navy);">Question 1 / 30</span>
+        <div class="timer-tag" id="timer-display">00:00</div>
+      </div>
+
+      <div class="progress-track">
+        <div class="progress-fill" id="quiz-progress"></div>
+      </div>
+
+      <div class="question-title" id="question-text">Loading question statement...</div>
+
+      <ul class="options-list" id="options-container">
+        <!-- Rendered dynamically -->
+      </ul>
+
+      <div class="nav-buttons">
+        <button class="btn" id="btn-prev" onclick="navigateQuestion(-1)" style="background: #64748b;">Previous</button>
+        <button class="btn" id="btn-next" onclick="navigateQuestion(1)">Next Question</button>
+        <button class="btn" id="btn-submit" onclick="finishQuiz()" style="background: var(--accent-green); display: none;">Submit Final Paper</button>
+      </div>
+    </div>
+
+    <!-- Screen 4: Results Screen -->
+    <div id="screen-results" class="screen">
+      <div id="results-content">
+        <!-- Rendered dynamically -->
+      </div>
+      <br>
+      <button class="btn" onclick="resetToModes()" style="width: 100%; justify-content: center; margin-top: 10px;">Attempt Another Difficulty Mode</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// Session 03 - 120 Newly Formulated Hard Questions strictly mapped to provided ESOFT lecture materials
+const session03Bank = {
+  easy: [
+    { q: "According to the slide materials, which of the following best contrasts System Software with Firmware?", options: ["System Software is stored in temporary RAM; Firmware is application code", "System Software manages overall hardware and system resources, whereas Firmware is permanently built-in code embedded inside hardware chips like ROM", "System Software is executed by Liveware; Firmware operates without hardware", "There is no difference between System Software and Firmware"], correct: 1 },
+    { q: "How is 'Data' distinguished from 'Information' in the foundational processing cycle diagram?", options: ["Data is processed output; Information is unorganized input", "Data consists of raw, unprocessed facts, while Information is data that has been structured and processed into a meaningful form", "Data refers only to text; Information refers only to numbers", "Data is non-volatile; Information is volatile"], correct: 1 },
+    { q: "Which exact computing platform was introduced by IBM in 1981, marking a historical milestone in PC development?", options: ["Apple Mac", "IBM Personal Computer (PC)", "IBM Mainframe 360", "IBM Supercomputer"], correct: 1 },
+    { q: "When Apple introduced the Mac in 1984, what core hardware interface concept did it popularize compared to early IBM PCs?", options: ["Command line batch files", "Integrated graphical display and microcomputing accessibility", "Dot matrix terminal control", "Mainframe remote terminal connectivity"], correct: 1 },
+    { q: "Which CPU sub-unit is explicitly responsible for directing communication signals between the ALU, registers, and memory during execution?", options: ["Arithmetic Logic Unit (ALU)", "Control Unit (CU)", "Video Graphics Unit", "Hard Disk Controller"], correct: 1 },
+    { q: "What primary operational characteristic defines Volatile RAM memory during a system power interruption?", options: ["Data is automatically backed up to Cloud storage", "All stored data is immediately lost when power is disconnected", "Data is permanently saved into ROM chips", "Data transfers directly to an external hard drive"], correct: 1 },
+    { q: "Read-Only Memory (ROM) is classified as non-volatile primary storage because:", options: ["It can be erased and overwritten by any user application", "Its stored boot instructions remain intact even when electrical power is switched off", "It relies on continuous electrical charges to hold bytes", "It connects via USB ports"], correct: 1 },
+    { q: "Which output printer technology functions by physically striking a row of mechanical pins against an inked ribbon onto paper?", options: ["Laser printer", "Ink-jet printer", "Dot matrix printer", "Thermal plotter"], correct: 2 },
+    { q: "How do Plotters differ fundamentally from conventional office Ink-jet or Laser printers?", options: ["Plotters cannot render drawings", "Plotters are designed to print precise continuous vector line graphics on large paper sheets", "Plotters process only digital audio signals", "Plotters operate exclusively in supercomputers"], correct: 1 },
+    { q: "In the context of secondary storage, why is an Internal Hard Disk classified differently from an External Hard Disk?", options: ["Internal Hard Disks use flash chips; External Hard Disks use ribbons", "Internal Hard Disks reside inside the main system casing, while External Hard Disks are portable units connected via external interfaces", "Internal Hard Disks are volatile; External Hard Disks are non-volatile", "Internal Hard Disks cannot store OS files"], correct: 1 },
+    { q: "Solid State Drives (SSDs) offer superior performance over magnetic Hard Disk Drives (HDDs) because SSDs:", options: ["Spin magnetic platters at 15,000 RPM", "Contain no moving mechanical components and access data via semiconductor flash memory", "Require constant optical laser alignment", "Operate without CPU instructions"], correct: 1 },
+    { q: "Which input device operates as an inverted mouse where the operator manually spins an exposed sphere?", options: ["Joystick", "Tracker ball", "Light pen", "Touchpad"], correct: 1 },
+    { q: "What light-sensitive input peripheral allows users to draw or select options directly on CRT display screens?", options: ["Bar code reader", "Light Pen", "Digital Camera", "Microphone"], correct: 1 },
+    { q: "Which cloud storage service was previously branded and known as SkyDrive?", options: ["iCloud", "Google Drive", "Microsoft OneDrive", "Dropbox"], correct: 2 },
+    { q: "In Windows 11 desktop architecture, where are default pinned application icons aligned on the taskbar?", options: ["Top left corner", "Centered along the taskbar", "Vertical right margin", "Bottom left corner"], correct: 1 },
+    { q: "What primary operational role does Liveware (Humanware) play within a complete computer system?", options: ["Executes BIOS self-tests", "Encompasses the human operators, engineers, and users who manage and utilize the computer system", "Provides physical power supply filtering", "Houses system micro-circuits"], correct: 1 },
+    { q: "Microcomputers represent which scale of computing systems in the structural hierarchy?", options: ["The largest, most expensive systems used by national weather centers", "The smallest category of general-purpose computers, encompassing PCs, laptops, and smartphones", "Midrange departmental multi-user servers", "Non-programmable calculator chips"], correct: 1 },
+    { q: "Minicomputers are functionally positioned between which two computing classifications?", options: ["Supercomputers and Mainframes", "Mainframe computers and Microcomputers", "Palmtops and Smart phones", "Calculators and Digital Cameras"], correct: 1 },
+    { q: "Which cloud storage platform is natively integrated into Apple iOS and macOS operating environments?", options: ["Google Drive", "OneDrive", "iCloud", "Dropbox"], correct: 2 },
+    { q: "A Portable Media Player (PMP), commonly referred to as an MP3 player, is categorized as what type of device?", options: ["Dedicated handheld digital audio/video playback device", "Mainframe terminal", "Primary system RAM storage", "Optical scanner"], correct: 0 },
+    { q: "What is the primary operational mechanism of an Optical Character Recognition (OCR) software application?", options: ["Prints high-resolution vector blueprints", "Converts scanned image text into editable digital text strings", "Formats secondary hard disk partitions", "Encodes digital voice recordings"], correct: 1 },
+    { q: "Optical Mark Readers (OMR) detect user input on specialized forms using what physical phenomenon?", options: ["Acoustic voice frequencies", "Light reflection / absorption levels on marked pencil spaces", "Magnetic stripe alignment", "Mechanical pin strikes"], correct: 1 },
+    { q: "Which device is explicitly listed in lecture slides as functioning as both an Input AND an Output device?", options: ["Laser Printer", "Flatbed Scanner", "Touch Screen Monitor", "Dot Matrix Printer"], correct: 2 },
+    { q: "In modern IT applications, how are Executive Support Systems (ESS) utilized in corporate decision-making?", options: ["Automating daily cashier transactions", "Providing high-level strategic summaries and decision support for senior executive leadership", "Managing local network cable infrastructure", "Replacing operating system drivers"], correct: 1 },
+    { q: "What is Teleworking, as defined in the IT usage in everyday life unit?", options: ["Manual paper filing in central archives", "Working remotely or from home using computer networks and communication tools", "Operating heavy factory machinery on site", "Building computer hardware components"], correct: 1 },
+    { q: "Which key benefit allows organizations using Cloud Storage to 'trade capital expense for variable expense'?", options: ["Eliminating internet service requirements", "Paying for storage incrementally as a variable operating cost instead of purchasing expensive server infrastructure upfront", "Buying local hard drives every month", "Replacing software licenses with hardware"], correct: 1 },
+    { q: "In the basic Computer Block Diagram, what is the role of the Input stage?", options: ["Displaying processed charts on screen", "Accepting raw data and user commands into the computer system", "Storing files permanently on optical discs", "Executing arithmetic logic comparisons"], correct: 1 },
+    { q: "Video Graphics Memory (VRAM) resides on specialized graphics cards to accomplish what task?", options: ["Permanently storing operating system system files", "Buffering visual image data ready to be output onto the display screen", "Processing incoming voice commands from microphones", "Backing up cloud drive files"], correct: 1 },
+    { q: "What hardware component inside modern advanced graphics cards processes complex 3D graphic pipelines independently?", options: ["System BIOS chip", "Dedicated Graphics Card CPU (GPU)", "Motherboard ROM", "Hard Disk Cache"], correct: 1 },
+    { q: "According to the Windows 11 introduction slides, what redesigned component serves as the central hub for accessing pinned apps and power options?", options: ["Control Panel", "Start Menu", "Device Manager", "Command Prompt"], correct: 1 }
+  ],
+
+  medium: [
+    { q: "If a computer system's RAM is completely filled, what secondary storage device historically acts as virtual memory extension despite much slower speeds?", options: ["Optical CD-ROM Drive", "Magnetic Hard Disk Drive / SSD", "ROM BIOS Chip", "PMP Memory"], correct: 1 },
+    { q: "In binary data representation, how many exact Bytes are equivalent to 1 Kilobyte (KB)?", options: ["1000 Bytes", "1024 Bytes", "1048576 Bytes", "512 Bytes"], correct: 1 },
+    { q: "How many Megabytes (MB) constitute 1 Gigabyte (GB) under binary capacity standards?", options: ["1000 MB", "1024 MB", "100 MB", "2048 MB"], correct: 1 },
+    { q: "What functional sequence occurs during the execution phase inside the CPU's Arithmetic Logic Unit (ALU)?", options: ["Fetching instructions from external optical discs", "Performing mathematical operations (addition, subtraction) and logical comparisons (AND, OR, equal to)", "Decoding user interface theme colors", "Saving files to cloud sync folders"], correct: 1 },
+    { q: "Why are Mainframe computers selected by international banks over Supercomputers for transaction processing?", options: ["Mainframes process complex climate calculations faster", "Mainframes excel at handling massive concurrent input/output transactions for thousands of simultaneous users reliably", "Mainframes are portable and battery powered", "Mainframes cost less than desktop microcomputers"], correct: 1 },
+    { q: "Which specific printer technology heats micro-nozzles to propel liquid ink droplets onto paper surfaces?", options: ["Dot Matrix Printer", "Ink-jet Printer", "Laser Printer", "Thermal Line Printer"], correct: 1 },
+    { q: "What distinguishes an Application Software package from System Software?", options: ["Application software controls internal hardware clock speeds", "Application software enables end-users to accomplish specific tasks like document creation, photo editing, or web browsing", "Application software is built permanently into ROM chips", "Application software runs without CPU execution"], correct: 1 },
+    { q: "How does IT facilitate automated Control Systems in modern manufacturing plants?", options: ["Sensors supply real-time environmental input to computer systems, which automatically process data to adjust machinery outputs", "By replacing physical products with digital PDF files", "By manually printing paper instructions for human operators", "By removing electric power requirements"], correct: 0 },
+    { q: "In the healthcare sector, how do computer systems integrate with diagnostic equipment according to lecture slides?", options: ["Managing digital patient records and processing complex medical imaging data from diagnostic scanners", "Replacing surgical tools completely", "Building custom microcomputer casing materials", "Automating facility janitorial tasks"], correct: 0 },
+    { q: "What primary task does an Optical Bar Code Reader perform in retail administration systems?", options: ["Scans printed bar patterns and translates light reflections into digital product identification codes", "Prints multi-part carbon receipts", "Executes system operating updates", "Captures voice input from customers"], correct: 0 },
+    { q: "What major UI feature in Windows 11 allows users to arrange multiple open windows into organized grid layouts?", options: ["Snap Layouts / Snap Groups", "Start Menu Pinning", "Taskbar Alignment", "Action Center"], correct: 0 },
+    { q: "Which class of computing system is expressly engineered for weather forecasting, nuclear modeling, and quantum physics simulations?", options: ["Supercomputer", "Minicomputer", "Tablet PC", "Personal Computer"], correct: 0 },
+    { q: "What mechanical limitation makes optical CD-ROM drives much slower than modern Solid State Drives?", options: ["CD-ROM drives use laser pick-up heads seeking physical tracks on spinning discs at limited data rates (base 150 KB/s)", "CD-ROM drives rely on magnetic tape reels", "CD-ROM drives process data using volatile RAM", "CD-ROM drives require cloud synchronization"], correct: 0 },
+    { q: "How is E-Business broadly differentiated from E-Commerce in the lecture material?", options: ["E-Business covers the comprehensive digital execution of all enterprise administrative processes, whereas E-Commerce specifically targets online commercial sales", "E-Business relies on paper ledgers; E-Commerce is online", "E-Business requires supercomputers; E-Commerce runs on palmtops", "There is no operational difference"], correct: 0 },
+    { q: "What input peripheral is built into laptop computers as a stationary surface to replace an external mouse?", options: ["Joystick", "Touchpad", "Light Pen", "Plotter"], correct: 1 },
+    { q: "Which component coordinates hardware initialization and loads the Operating System into RAM during system boot-up?", options: ["Application software", "Firmware (BIOS / UEFI) in ROM", "External hard drive driver", "Liveware manual command"], correct: 1 },
+    { q: "What key advantage does Cloud Storage offer regarding multi-device access?", options: ["Files synced to cloud accounts can be accessed securely from any location with internet connectivity", "Files can only be opened on the original physical computer", "Requires manual cable connections between all devices", "Eliminates network data transmission"], correct: 0 },
+    { q: "In educational environments, how are computer applications effectively implemented as described in Unit 1?", options: ["Facilitating E-Learning platforms, virtual classrooms, and computer-based educational training tools", "Replacing teachers with dot matrix printers", "Formatting physical textbooks", "Building microchip silicon wafers"], correct: 0 },
+    { q: "How do Decision Support Systems (DSS) assist middle and senior organizational management?", options: ["Analyzing historical and operational business data to assist managers in resolving non-routine decision problems", "Automating basic text word processing", "Formatting hard disk partitions", "Directing network router traffic"], correct: 0 },
+    { q: "What is the primary role of a digital Webcam connected to a computer system?", options: ["Capturing real-time video and image inputs for communication streaming or recording", "Printing vector blueprint graphics", "Storing secondary system backup files", "Scanning printed barcode labels"], correct: 0 },
+    { q: "Which output peripheral generates physical sound waves from processed digital audio signals?", options: ["Speaker", "Microphone", "Webcam", "Light Pen"], correct: 0 },
+    { q: "What physical structural advantage do flat-screen LCD/LED monitors have over traditional CRT monitors?", options: ["Flat screens occupy significantly less desktop space and consume less electrical energy", "Flat screens weigh over 50 kg", "Flat screens cannot display color graphics", "Flat screens require higher operating voltages"], correct: 0 },
+    { q: "Management Information Systems (MIS) primarily generate reports tailored for which management level?", options: ["Frontline operational cashiers", "Middle management tactical decision makers", "External hardware vendors", "System network installers"], correct: 1 },
+    { q: "What is the function of a Microphone when used in Voice Input systems?", options: ["Captures analog acoustic audio waves and converts them into digital audio signals for speech recognition software", "Outputs digitized voice files into room air", "Scans text pages for OCR software", "Prints voice wave patterns on paper"], correct: 0 },
+    { q: "Smartphones are classified as Microcomputers because they contain which core hardware architecture?", options: ["A integrated micro-processor, internal memory, touch input, and display screen operating on system software", "A supercomputing water-cooled array", "A mainframe terminal board", "A non-programmable logic gate"], correct: 0 },
+    { q: "How do government organizations utilize IT processes according to Unit 1 slides?", options: ["Deploying E-Government portals for citizen services, online tax processing, and public administrative licensing", "Building commercial gaming platforms", "Replacing all public transportation with hardware", "Eliminating digital record archives"], correct: 0 },
+    { q: "What makes an External Hard Disk an ideal secondary storage solution for data backup?", options: ["High storage capacity and portability via universal plug-and-play interfaces like USB", "Volatile storage characteristics", "Direct connection to CPU instruction registers", "Built-in optical laser burners"], correct: 0 },
+    { q: "What is the core function of Google Drive as presented in Cloud Technologies slides?", options: ["Providing cloud file storage, synchronization, and web-based file sharing services", "Replacing system RAM chips physically", "Managing local motherboard BIOS settings", "Executing offline graphics rendering"], correct: 0 },
+    { q: "Why is the Control Unit (CU) described as the 'brain' or 'manager' of the CPU?", options: ["It performs complex addition calculations", "It fetches, decodes, and manages the execution flow of instructions throughout the system", "It stores persistent desktop files", "It powers the cooling fan assembly"], correct: 1 },
+    { q: "In the electronic world, what primary advantage does E-mail offer over conventional physical mail?", options: ["Instantaneous global digital transmission of text messages and electronic file attachments", "Requires physical transport trucks", "Guarantees physical paper delivery", "Functions without network infrastructure"], correct: 0 }
+  ],
+
+  hard: [
+    { q: "Convert binary storage units: Calculate how many total Bytes are present in exactly 3 Megabytes (MB). (1 KB = 1024 Bytes, 1 MB = 1024 KB)", options: ["3,000,000 Bytes", "3,145,728 Bytes", "1,048,576 Bytes", "3,072,000 Bytes"], correct: 1 },
+    { q: "Analyze the complete CPU Instruction Cycle in proper chronological execution order:", options: ["Fetch instruction -> Decode instruction -> Execute instruction -> Store result", "Execute instruction -> Fetch instruction -> Decode instruction -> Store result", "Decode instruction -> Fetch instruction -> Store result -> Execute instruction", "Store result -> Execute instruction -> Fetch instruction -> Decode instruction"], correct: 0 },
+    { q: "When a user executes a program stored on an SSD, what precise data transfer sequence takes place prior to execution?", options: ["Program code is copied from SSD into system RAM -> CPU fetches instructions from RAM for processing", "Program code moves from SSD directly to ROM -> ALU executes code", "SSD streams code directly to display monitor -> CU interprets graphics", "SSD transfers code to Cloud storage -> Cloud streams results back"], correct: 0 },
+    { q: "In system memory architecture, how does Cache memory accelerate CPU operational speed?", options: ["Provides ultra-fast temporary buffer memory residing near or on the CPU to store frequently accessed data and instructions", "Replaces the primary hard disk entirely", "Stores permanent non-volatile BIOS firmware", "Syncs local files to cloud drives"], correct: 0 },
+    { q: "Evaluate the primary operational constraint of optical CD-ROM drives in modern computing environments:", options: ["Slow optical data read speeds (150 KB/s base specification) and non-expandable capacity limits (650-700 MB)", "High electrical power draw exceeding 1000W", "Inability to interact with System Software", "Vulnerability to magnetic erasure"], correct: 0 },
+    { q: "What distinct technical capability makes Dot Matrix printers irreplaceable in specialized logistics and banking operations?", options: ["Ability to produce multi-part carbon copy forms through continuous mechanical impact pins", "High-resolution color photo rendering speeds", "Zero mechanical operational noise", "Wireless cloud printing without software"], correct: 0 },
+    { q: "How do Executive Support Systems (ESS) differ structurally from Management Information Systems (MIS)?", options: ["ESS aggregates internal and external data into visual executive dashboards for long-term strategic planning; MIS generates structured internal reports for middle management tactical control", "ESS records cashier sales transactions; MIS manages hardware cabling", "ESS is system software; MIS is application software", "ESS targets frontline operators; MIS targets CEOs"], correct: 0 },
+    { q: "What technical distinction separates a Dedicated Graphics Card (GPU) from integrated CPU graphics processing?", options: ["Dedicated GPUs feature independent video processing cores and dedicated high-speed VRAM, relieving primary system RAM and CPU load", "Integrated graphics cards have higher VRAM capacities than dedicated GPUs", "Dedicated GPUs process audio files rather than visual frames", "Integrated graphics require external hard drive connections"], correct: 0 },
+    { q: "Analyze how Teleworking corporate infrastructures safeguard data transmitted over public networks:", options: ["Encrypting network data connections using Virtual Private Networks (VPN) and secure protocols", "Using dot matrix printed letters", "Disconnecting local computers from power grids", "Storing all data on optical CD-ROM discs"], correct: 0 },
+    { q: "How does the Operating System function as an intermediary layer within system architecture?", options: ["Abstracts hardware complexities, manages system memory, CPU scheduling, and file I/O, providing a stable platform for application software", "Edits digital photographs directly", "Acts as an optical scanner hardware device", "Formats power supply current"], correct: 0 },
+    { q: "Calculate binary memory equivalence: How many Kilobytes (KB) are equivalent to 1 Gigabyte (GB)?", options: ["1,000,000 KB", "1,048,576 KB", "1,024 KB", "512,000 KB"], correct: 1 },
+    { q: "In industrial automated control systems, what is the exact function of hardware input sensors?", options: ["Continuously detect physical environmental changes (temperature, pressure) and convert them into digital input signals for processing", "Allow human operators to manually type code onto keypads", "Print diagnostic error logs on continuous paper rolls", "Store cloud backups"], correct: 0 },
+    { q: "Analyze the commercial model of E-Commerce relative to physical brick-and-mortar retail:", options: ["E-Commerce removes geographical and time boundaries, facilitating 24/7 global web transactions with reduced physical storefront overhead", "E-Commerce restricts operations strictly to local business hours", "E-Commerce eliminates electronic payment gateways", "Physical retail has zero overhead costs"], correct: 0 },
+    { q: "What precise sequence occurs during the Power-On Self-Test (POST) phase executed by system Firmware upon boot-up?", options: ["Firmware verifies hardware component integrity, initializes bus controllers, and loads the OS bootloader from secondary storage into RAM", "OS loads Firmware into RAM first", "Application programs initialize hardware circuits directly", "RAM formats secondary storage partitions"], correct: 0 },
+    { q: "Contrast the printing mechanisms of Ink-jet printers and Laser printers:", options: ["Ink-jet sprays micro-droplets of liquid ink; Laser uses electrostatic charges, laser beams, and dry powder toner fused by heat", "Ink-jet uses impact pins; Laser uses liquid ink ribbons", "Ink-jet prints faster for multi-thousand page office runs", "Laser printers cannot render black and white text"], correct: 0 },
+    { q: "Why is non-volatile secondary storage structurally necessary in a computer system alongside high-speed RAM?", options: ["RAM is volatile and loses all stored data when power is lost; secondary storage provides persistent long-term data retention", "RAM operates too slowly to store user files", "Secondary storage executes instructions directly inside the ALU", "RAM cannot store numerical values"], correct: 0 },
+    { q: "In advanced healthcare systems, how does IT processing integrate with CT and MRI diagnostic equipment?", options: ["Digital sensors in diagnostic equipment capture physical scan data, which specialized software processes into 3D cross-sectional visual models", "Physicians sketch scans manually using paint software", "Printers process diagnoses without software", "Scanners replace surgical operating systems"], correct: 0 },
+    { q: "Evaluate the role of Portable Media Players (PMPs) in mobile hardware evolution:", options: ["PMPs pioneered portable digital storage and media playback, laying architectural foundations later integrated into modern smartphones", "PMPs served as early supercomputing nodes", "PMPs were primary enterprise backup tape drives", "PMPs acted as vector plotters"], correct: 0 },
+    { q: "What is the structural purpose of the Task View button integrated into the Windows 11 Taskbar?", options: ["Enables users to toggle between open applications and manage multiple virtual desktop workspaces", "Triggers immediate storage formatting", "Opens BIOS setup utility", "Shuts down system electrical power"], correct: 0 },
+    { q: "Differentiate Transaction Processing Systems (TPS) from Decision Support Systems (DSS):", options: ["TPS records and processes routine daily business transactions; DSS analyzes accumulated operational data to inform non-routine decisions", "TPS is utilized by senior executives; DSS is used by cashiers", "TPS requires supercomputers; DSS requires palmtops", "There is no functional distinction"], correct: 0 },
+    { q: "Calculate file ratio: A digital document file of size 256 Kilobytes (KB) represents what fraction of 1 Megabyte (MB)?", options: ["0.25 MB (Exactly one-fourth)", "0.5 MB", "0.256 MB", "1.0 MB"], correct: 0 },
+    { q: "What essential architectural function does the System Bus perform on a computer motherboard?", options: ["Serves as high-speed parallel electrical pathways carrying data, memory addresses, and control signals between CPU, RAM, and expansion slots", "Connects external power cords to wall outlets", "Acts as application software driver code", "Controls cooling fan rotational speeds"], correct: 0 },
+    { q: "Why are Uninterruptible Power Supply (UPS) units deployed in critical IT server infrastructure?", options: ["Provides emergency battery backup power and line conditioning during blackout events to prevent unexpected server crashes and data corruption", "Increases CPU clock frequency during peak loads", "Compresses database storage files", "Cools system motherboard circuits"], correct: 0 },
+    { q: "Why are Vector Plotters superior to conventional Raster Ink-jet printers for engineering blueprints?", options: ["Plotters draw continuous, highly accurate vector lines across large-scale engineering sheets without pixelation", "Plotters print raster photos faster", "Plotters consume less electricity than handheld calculators", "Plotters operate without computer systems"], correct: 0 },
+    { q: "Which focus productivity feature in Windows 11 organizes active application windows into pre-set multi-pane desktop tiles?", options: ["Snap Layouts", "Task Manager", "Device Manager", "Control Panel"], correct: 0 },
+    { q: "How does Cloud Storage synchronization (e.g., OneDrive, Google Drive) function at the operating system level?", options: ["Background OS services monitor local synchronized folders and transmit file changes over encrypted network protocols to cloud servers", "Requires users to manually email updated files every hour", "Saves local files directly onto optical discs", "Requires physical USB cable connections"], correct: 0 },
+    { q: "What is the ultimate systemic objective of orchestrating Hardware, Software, Firmware, and Liveware within an organization?", options: ["To efficiently transform unorganized raw data into accurate, timely, and actionable information", "To maximize physical electrical consumption", "To eliminate all human operators from business workflows", "To replace paper archives with physical tape rolls"], correct: 0 },
+    { q: "What operational characteristic differentiates static Random Access Memory from Read-Only Memory during system runtime?", options: ["RAM allows continuous read and write operations at high speeds; ROM is read-only during standard system operation", "RAM stores permanent boot code; ROM holds temporary files", "RAM is non-volatile; ROM is volatile", "RAM connects via USB external ports"], correct: 0 },
+    { q: "In the context of IT in Education, what is the function of a Virtual Classroom system?", options: ["Combines video streaming, interactive whiteboards, and digital communication tools to conduct remote instruction synchronously over networks", "Replaces school buildings with physical dot matrix printers", "Formats student hard drives automatically", "Generates microchip silicon wafers"], correct: 0 },
+    { q: "How does proper Liveware training impact overall computer system efficiency and security?", options: ["Reduces human operational errors, prevents security vulnerabilities, and maximizes software/hardware resource utilization", "Increases CPU clock speed directly", "Eliminates the need for operating system software", "Replaces secondary storage drives"], correct: 0 }
+  ],
+
+  super_hard: [
+    { q: "Calculate exact binary capacity: How many total Bytes are contained within a 5 Megabyte (MB) document file? (1 KB = 1024 Bytes, 1 MB = 1024 KB)", options: ["5,000,000 Bytes", "5,242,880 Bytes", "2,621,440 Bytes", "5,120,000 Bytes"], correct: 1 },
+    { q: "Synthesize the precise execution flow during a CPU Instruction Cycle execution step:", options: ["Control Unit fetches instruction from RAM -> decodes instruction into micro-code -> ALU executes operation -> result written to register/RAM", "ALU fetches instruction -> CU executes operation -> result sent to display -> RAM decodes", "RAM decodes instruction -> CU fetches from SSD -> ALU stores to ROM", "Display fetches instruction -> ALU decodes -> CU stores to Cloud"], correct: 0 },
+    { q: "Analyze the systemic data flow when launching a heavy application from a Solid State Drive:", options: ["OS loads executable code from SSD into system RAM -> CPU fetches instructions via system bus -> GPU renders graphics using VRAM", "Code streams from SSD directly to ROM -> ALU executes code without RAM", "SSD streams code to VDU -> CU renders graphics directly", "SSD syncs code to Cloud -> Cloud streams back rendered frames"], correct: 0 },
+    { q: "Compare Minicomputer (Midrange) architectures with Mainframe enterprise systems:", options: ["Minicomputers serve departmental multi-user workloads; Mainframes handle massive enterprise-wide simultaneous I/O transaction processing", "Minicomputers execute climate simulations faster than Supercomputers", "Mainframes are battery-powered portable notebooks", "Minicomputers support only 1 single user"], correct: 0 },
+    { q: "Evaluate Cloud Storage deployment tradeoffs vs On-Premises Secondary Storage based on Unit 1 slides:", options: ["Cloud offers operational flexibility and reduced capital infrastructure costs but introduces network bandwidth dependencies and external security governance risks", "Cloud storage operates without internet connectivity", "On-premises storage has zero maintenance cost", "Cloud storage replaces system RAM micro-chips"], correct: 0 },
+    { q: "Differentiate the managerial focus of Executive Support Systems (ESS) vs Management Information Systems (MIS):", options: ["ESS delivers non-procedural strategic insights and trend analysis for senior executives; MIS delivers structured tactical reports based on operational TPS data for middle managers", "ESS manages daily cashier receipts; MIS handles network cabling", "ESS is system software; MIS is application software", "They serve identical organizational roles"], correct: 0 },
+    { q: "Analyze the functional hierarchy and volatility of ROM, RAM, Cache, and Secondary Storage in modern computing architecture:", options: ["ROM holds non-volatile boot firmware; Cache/RAM provide volatile ultra-fast/fast operational memory; Secondary Storage provides non-volatile persistent capacity", "RAM is non-volatile; ROM is volatile; Cache is optical", "Cache is cloud storage; RAM is optical; ROM is magnetic", "All four storage tiers lose data upon power loss"], correct: 0 },
+    { q: "Windows 11 Interface Architecture: What primary visual alignment modification was made to the Start Button and pinned Taskbar icons by default?", options: ["Centered horizontally along the bottom Taskbar", "Docked vertically along the right screen border", "Hidden inside Settings menu", "Fixed to top left title bar"], correct: 0 },
+    { q: "Which precise combination of input peripherals enables real-time graphic vector tracing and CAD digitizing directly on screen surfaces?", options: ["Digitizer Tablet / Touch Stylus / Light Pen", "Standard Optical Mouse and Keyboard", "Bar Code Reader and OMR Scanner", "Tracker ball and Joystick"], correct: 0 },
+    { q: "Why do enterprise logistical setups retain Dot Matrix impact printers over high-speed laser printers for invoices?", options: ["To physically strike pin arrays through carbon paper, generating duplicate multi-part physical forms simultaneously", "To print high-speed multi-color marketing photos", "To eliminate mechanical operational noise", "Because toner cartridges are unavailable"], correct: 0 },
+    { q: "Identify the dedicated processing subsystem responsible for handling complex 3D ray tracing and frame rendering independently of system CPU/RAM:", options: ["Dedicated Graphics Card (GPU) with integrated VRAM", "Motherboard BIOS Firmware Chip", "Primary CPU Arithmetic Logic Unit", "Internal SSD Buffer Cache"], correct: 0 },
+    { q: "Which communications architecture enables secure, encrypted corporate network access for remote Teleworking staff over public internet channels?", options: ["Virtual Private Network (VPN) tunneling over broadband connections", "Local CD-ROM drives", "Un-networked standalone PCs", "Portable Media Players"], correct: 0 },
+    { q: "How does System Software function as the foundational abstraction layer above computer hardware?", options: ["Manages physical hardware controllers, memory allocation, and CPU scheduling, providing standardized APIs for application software execution", "Edits image pixels directly", "Functions as an optical scanner peripheral", "Regulates power supply voltage"], correct: 0 },
+    { q: "Binary Unit Conversion: How many Kilobytes (KB) are equivalent to 1 Gigabyte (GB) under binary standards?", options: ["1,000,000 KB", "1,048,576 KB", "1,024 KB", "512,000 KB"], correct: 1 },
+    { q: "In automated manufacturing control systems, how do input sensors and computer processors interact?", options: ["Sensors continuously convert physical state variables (heat, pressure) into digital data, which the computer evaluates against control thresholds to actuate machinery", "Human operators type all sensor measurements manually into keypads", "Printers generate paper reports for robotic cameras to view", "Cloud drives store physical raw materials"], correct: 0 },
+    { q: "Analyze the structural competitive advantage of E-Commerce relative to traditional physical retail storefronts:", options: ["Eliminates geographic boundaries and physical operational hours, enabling automated 24/7 global transactions with reduced overhead", "Limits trading hours strictly to daylight hours", "Eliminates network security protocols", "Requires higher storefront property leases"], correct: 0 },
+    { q: "Describe the execution sequence performed during Power-On Self-Test (POST) by motherboard Firmware upon powering on:", options: ["Firmware performs hardware diagnostics, initializes system buses, and loads the OS bootloader into RAM for execution", "OS loads Firmware into system RAM first", "Application programs initialize motherboard buses directly", "RAM formats secondary storage drives"], correct: 0 },
+    { q: "Which precise physical printing mechanism differentiates Ink-jet printers from Laser printers?", options: ["Ink-jet propels microscopic liquid ink droplets; Laser uses laser beams and static electricity to fuse dry toner powder onto paper", "Ink-jet uses impact pins; Laser uses ink ribbons", "Ink-jet prints multi-thousand page office documents faster", "Laser printers cannot print monochrome text"], correct: 0 },
+    { q: "Why is persistent secondary storage indispensable in modern computer architecture despite gigabytes of system RAM?", options: ["RAM is volatile memory that loses all state upon power cutoff; secondary storage guarantees persistent non-volatile data retention", "RAM operates too slowly to store user files", "Secondary storage replaces CPU instruction registers", "RAM cannot store numeric values"], correct: 0 },
+    { q: "In modern medical diagnostics, how does IT processing integrate with diagnostic imaging machinery (CT/MRI)?", options: ["Sensors capture raw physical energy signals, which computer algorithms process into high-resolution 2D/3D digital anatomical images", "Doctors sketch scan results manually using Paint tools", "Printers synthesize diagnoses without software", "Scanners replace surgical operating systems"], correct: 0 },
+    { q: "Evaluate the historical hardware contribution of Portable Media Players (PMPs) to modern consumer electronics:", options: ["PMPs established compact digital storage and media decoding architectures that were subsequently integrated into modern smartphones", "PMPs served as early supercomputer nodes", "PMPs were primary enterprise tape archives", "PMPs acted as vector line plotters"], correct: 0 },
+    { q: "What primary workspace management capability does Task View deliver in the Windows 11 desktop environment?", options: ["Allows users to view all active application windows and manage multiple distinct virtual desktops", "Formats secondary storage media", "Triggers BIOS utility access", "Configures power supply voltages"], correct: 0 },
+    { q: "Compare Transaction Processing Systems (TPS) with Decision Support Systems (DSS) regarding data processing orientation:", options: ["TPS captures daily operational transaction records; DSS analyzes aggregated TPS data to model strategic non-routine decision scenarios", "TPS is used exclusively by CEOs; DSS is used by cashiers", "TPS operates without hardware; DSS requires supercomputers", "There is no functional difference"], correct: 0 },
+    { q: "Calculate binary file proportion: A file of size 768 Kilobytes (KB) represents what exact fraction of 1 Megabyte (MB)?", options: ["0.75 MB (Exactly three-fourths)", "0.5 MB", "0.768 MB", "1.0 MB"], correct: 0 },
+    { q: "What architectural role does the System Bus play on a microcomputer motherboard?", options: ["Acts as a high-speed parallel electrical communication highway conducting data, memory addresses, and control signals between system components", "Connects motherboard to electrical wall outlets", "Serves as device driver software code", "Regulates cooling fan speeds"], correct: 0 },
+    { q: "Why are Uninterruptible Power Supply (UPS) units deployed alongside critical IT infrastructure?", options: ["Provides instant emergency battery power and surge filtering during power disruptions to prevent sudden system crashes and data loss", "Increases CPU clock frequency during heavy processing", "Compresses local database files", "Cools motherboard circuitry"], correct: 0 },
+    { q: "Why are vector plotters preferred over conventional raster printers for large-scale architectural blueprints?", options: ["Plotters render continuous, precise vector lines across wide paper formats without pixelation", "Plotters print raster photographic prints faster", "Plotters consume less electricity than pocket calculators", "Plotters function without computer connections"], correct: 0 },
+    { q: "Which window management feature in Windows 11 arranges multiple running applications into multi-pane screen configurations?", options: ["Snap Layouts", "Task Manager", "Device Manager", "Control Panel"], correct: 0 },
+    { q: "How does Cloud Storage synchronization operate in background OS architecture?", options: ["Background OS synchronization agents detect local file changes and transmit updates securely across internet protocols to cloud servers", "Requires users to manually email file changes every hour", "Saves local files directly onto optical CD-ROMs", "Requires physical USB connections between devices"], correct: 0 },
+    { q: "What is the primary overarching goal of integrating Hardware, Software, Firmware, and Liveware in an IT ecosystem?", options: ["To transform unprocessed raw data into accurate, timely, and actionable information efficiently", "To maximize physical electrical power consumption", "To eliminate all human operators from computing systems", "To convert digital records back into physical paper archives"], correct: 0 }
+  ]
+};
+
+// Mode Configuration
+const modeConfig = {
+  easy: { name: "Easy", timeMinutes: 15 },
+  medium: { name: "Medium", timeMinutes: 30 },
+  hard: { name: "Hard", timeMinutes: 45 },
+  super_hard: { name: "Super Hard", timeMinutes: 60 }
+};
+
+// Application State
+let studentName = "";
+let currentMode = "";
+let currentQuestions = [];
+let userAnswers = {}; // { questionIndex: selectedOptionIndex }
+let currentQuestionIndex = 0;
+let timerInterval = null;
+let timeRemainingSeconds = 0;
+let isTimeUp = false;
+
+// DOM References
+const screenName = document.getElementById("screen-name");
+const screenMode = document.getElementById("screen-mode");
+const screenQuiz = document.getElementById("screen-quiz");
+const screenResults = document.getElementById("screen-results");
+
+const inputName = document.getElementById("student-name");
+const questionTracker = document.getElementById("question-tracker");
+const timerDisplay = document.getElementById("timer-display");
+const quizProgress = document.getElementById("quiz-progress");
+const questionText = document.getElementById("question-text");
+const optionsContainer = document.getElementById("options-container");
+const btnPrev = document.getElementById("btn-prev");
+const btnNext = document.getElementById("btn-next");
+const btnSubmit = document.getElementById("btn-submit");
+const resultsContent = document.getElementById("results-content");
+
+function showScreen(screen) {
+  [screenName, screenMode, screenQuiz, screenResults].forEach(s => s.classList.remove("active"));
+  screen.classList.add("active");
+}
+
+function submitName() {
+  const val = inputName.value.trim();
+  if (!val) {
+    alert("Please enter candidate name to proceed.");
+    return;
+  }
+  studentName = val;
+  showScreen(screenMode);
+}
+
+function startQuiz(modeKey) {
+  currentMode = modeKey;
+  currentQuestions = session03Bank[modeKey];
+  userAnswers = {};
+  currentQuestionIndex = 0;
+  isTimeUp = false;
+
+  // Set Timer
+  const minutes = modeConfig[modeKey].timeMinutes;
+  timeRemainingSeconds = minutes * 60;
+  startTimer();
+
+  showScreen(screenQuiz);
+  renderQuestion();
+}
+
+function startTimer() {
+  clearInterval(timerInterval);
+  updateTimerDisplay();
+
+  timerInterval = setInterval(() => {
+    timeRemainingSeconds--;
+    updateTimerDisplay();
+
+    if (timeRemainingSeconds <= 0) {
+      clearInterval(timerInterval);
+      handleTimeUp();
+    }
+  }, 1000);
+}
+
+function updateTimerDisplay() {
+  const m = Math.floor(timeRemainingSeconds / 60);
+  const s = timeRemainingSeconds % 60;
+  timerDisplay.textContent = `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+}
+
+function handleTimeUp() {
+  isTimeUp = true;
+  alert("Time limit expired! Your exam will be submitted automatically.");
+  finishQuiz();
+}
+
+function renderQuestion() {
+  const q = currentQuestions[currentQuestionIndex];
+  const total = currentQuestions.length;
+
+  questionTracker.textContent = `Question ${currentQuestionIndex + 1} of ${total} (${modeConfig[currentMode].name} Mode)`;
+  
+  // Progress bar fill
+  const progressPercent = ((currentQuestionIndex + 1) / total) * 100;
+  quizProgress.style.width = `${progressPercent}%`;
+
+  questionText.textContent = `${currentQuestionIndex + 1}. ${q.q}`;
+  optionsContainer.innerHTML = "";
+
+  q.options.forEach((opt, idx) => {
+    const li = document.createElement("li");
+
+    const label = document.createElement("label");
+    label.className = "option-label";
+
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.checked = userAnswers[currentQuestionIndex] === idx;
+
+    checkbox.addEventListener("change", () => {
+      if (checkbox.checked) {
+        userAnswers[currentQuestionIndex] = idx;
+        renderQuestion();
+      } else {
+        delete userAnswers[currentQuestionIndex];
+      }
+    });
+
+    label.appendChild(checkbox);
+    label.appendChild(document.createTextNode(`${String.fromCharCode(65 + idx)}. ${opt}`));
+    li.appendChild(label);
+    optionsContainer.appendChild(li);
+  });
+
+  // Navigation Control States
+  btnPrev.disabled = currentQuestionIndex === 0;
+
+  if (currentQuestionIndex === total - 1) {
+    btnNext.style.display = "none";
+    btnSubmit.style.display = "inline-flex";
+  } else {
+    btnNext.style.display = "inline-flex";
+    btnSubmit.style.display = "none";
+  }
+}
+
+function navigateQuestion(direction) {
+  const targetIndex = currentQuestionIndex + direction;
+  if (targetIndex >= 0 && targetIndex < currentQuestions.length) {
+    currentQuestionIndex = targetIndex;
+    renderQuestion();
+  }
+}
+
+function finishQuiz() {
+  clearInterval(timerInterval);
+
+  let marksObtained = 0;
+  const totalQuestions = currentQuestions.length;
+
+  currentQuestions.forEach((q, idx) => {
+    if (userAnswers[idx] === q.correct) {
+      marksObtained++;
+    }
+  });
+
+  const percentage = ((marksObtained / totalQuestions) * 100).toFixed(1);
+
+  // Grade Categories
+  let grade = "F (Fail)";
+  if (percentage >= 85) grade = "A+ (Distinction)";
+  else if (percentage >= 75) grade = "A (Excellent)";
+  else if (percentage >= 65) grade = "B (Credit)";
+  else if (percentage >= 50) grade = "C (Pass)";
+
+  showScreen(screenResults);
+
+  if (isTimeUp && marksObtained < (totalQuestions * 0.5)) {
+    resultsContent.innerHTML = `
+      <div class="results-box">
+        <div class="failed-status">Your Failed</div>
+        <p style="color: var(--text-muted); margin-bottom: 20px;">Time expired before achieving the required passing score.</p>
+        <div class="metric-grid">
+          <div class="metric-card">
+            <div class="val">${studentName}</div>
+            <div class="lbl">Candidate Name</div>
+          </div>
+          <div class="metric-card">
+            <div class="val">${marksObtained} / ${totalQuestions}</div>
+            <div class="lbl">Marks Obtained</div>
+          </div>
+          <div class="metric-card">
+            <div class="val">${percentage}%</div>
+            <div class="lbl">Average Score</div>
+          </div>
+        </div>
+        <div class="grade-badge" style="background: var(--accent-red);">Suitable Grade: ${grade}</div>
+      </div>
+    `;
+  } else {
+    resultsContent.innerHTML = `
+      <div class="results-box">
+        <h2>Examination Result Sheet</h2>
+        <div class="metric-grid">
+          <div class="metric-card">
+            <div class="val" style="font-size: 1.1rem;">${studentName}</div>
+            <div class="lbl">Candidate Name</div>
+          </div>
+          <div class="metric-card">
+            <div class="val">${modeConfig[currentMode].name}</div>
+            <div class="lbl">Selected Mode</div>
+          </div>
+          <div class="metric-card">
+            <div class="val">${marksObtained} / ${totalQuestions}</div>
+            <div class="lbl">Marks Obtained</div>
+          </div>
+          <div class="metric-card">
+            <div class="val">${percentage}%</div>
+            <div class="lbl">Average Score</div>
+          </div>
+        </div>
+        <div class="grade-badge">Suitable Grade: ${grade}</div>
+      </div>
+    `;
+  }
+}
+
+function resetToModes() {
+  showScreen(screenMode);
+}
+</script>
+
+</body>
+</html>
